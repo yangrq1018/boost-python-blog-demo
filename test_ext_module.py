@@ -20,3 +20,15 @@ def test_py_override():
     f = MyInc()
     assert f.callInc(3) == 4
     assert f.callInc(-1) == 0
+
+def test_student_iter():
+    s = Student()
+    assert list(s) == ["bar", "baz"]
+    s.makeFriend(Student("qux", 80))
+    assert list(s) == ["bar", "baz", "qux"]
+
+def test_student_add():
+    s1 = Student("foo", 20)
+    s2 = Student("qux", 80)
+    assert (s1 + s2).name == "foo-qux"
+    assert (s1 + s2).score == 100

@@ -36,6 +36,9 @@ public:
     const_iterator end() const {
         return m_friends.end();
     }
+    void makeFriend(const Student &s) {
+        m_friends.push_back(s.name());
+    }
 
 private:
     string m_name;
@@ -59,13 +62,14 @@ Student operator+(const Student &a, const Student &b) {
 }
 
 BOOST_PYTHON_MODULE(student) {
-    class_<Student>("Student", "代表学生的类", init<>())
+    class_<Student>("Student", "Represent a student", init<>())
       .def(init<const string &, int64_t>())
       .def(self_ns::str(self))
       .def(self_ns::repr(self))
-      .def(self+self)
-      .add_property("name", &Student::name, &Student::set_name, "名字")
-      .add_property("score", &Student::score, "得分")
-      .def("learn", &Student::learn, "学习")
+      .def(self + self)
+      .add_property("name", &Student::name, &Student::set_name)
+      .add_property("score", &Student::score)
+      .def("learn", &Student::learn, "gain some score")
+      .def("makeFriend", &Student::makeFriend, "make a friend")
       .def("__iter__", iterator<const Student>());
 }
