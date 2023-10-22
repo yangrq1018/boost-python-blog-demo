@@ -1,6 +1,6 @@
+import pytest
 from mymath import add
 from student import Student
-from inc import IncBase, callInc
 
 
 def test_add():
@@ -16,12 +16,26 @@ def test_student_make():
 
 
 def test_py_override():
-    class MyInc(IncBase):
+    from inc import IncBase, callInc, __IncBase
+
+    class MyInc1(__IncBase):
         def inc(self, n):
             return n + 1
-    f = MyInc()
+    with pytest.raises(RuntimeError):
+        f = MyInc1()
+
+    class MyInc2(IncBase):
+        def inc(self, n):
+            return n + 1
+    f = MyInc2()
     assert callInc(f, 3) == 4
     assert callInc(f, -1) == 0
+
+
+def test_cpp_override():
+    from inc import IncImp, callInc
+    f = IncImp()
+    assert callInc(f, 3) == 4
 
 
 def test_student_iter():

@@ -27,11 +27,16 @@ public:
 };
 
 BOOST_PYTHON_MODULE(inc) {
-    // clang-format off
-    class_<IncBaseWrap, boost::noncopyable>("IncBase")
-        .def(init<>());
-    class_<IncImp, bases<IncBase>, boost::noncopyable>("IncImp")
-        .def(init<>());
+    // the way to export an abstract type, only for declaration purpose
+    // to make bases<IncBase> happy
+    class_<IncBase, boost::noncopyable>("__IncBase", no_init);
+
+    // Wrap inter python override call
+    class_<IncBaseWrap, boost::noncopyable>("IncBase").def(init<>());
+
+    // Implementation
+    class_<IncImp, bases<IncBase>>("IncImp").def(init<>());
+
+    // Consumer
     def("callInc", callInc, (arg("imp"), arg("n")));
-    // clang-format on
 }
